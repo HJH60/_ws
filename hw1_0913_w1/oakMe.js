@@ -10,10 +10,10 @@ app.use((ctx) => {
 <body>
 <h1>我的自我介紹</h1>
 <ol>
-<li><a href="/name">姓名:胡佳慧</a></li>
-<li><a href="/age">年齡:21</a></li>
-<li><a href="/gender">性別:女</a></li>
-<li><a href="/school">學校:NQU</a></li>
+<li><a href="/name">姓名</a></li>
+<li><a href="/age">年齡</a></li>
+<li><a href="/gender">性別</a></li>
+<li><a href="/school">學校</a></li>
 </ol>
 </body>
 </html>
