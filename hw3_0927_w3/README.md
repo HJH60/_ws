@@ -9,6 +9,9 @@ router.get('/:user/', list)
   .post('/:user/post', create);
 ```
 ## 程式碼
++ 參考老師的範例程式去寫的
++ 使用ChatGPT協助debug
+
 [app.js](./app.js)
 
 [render.js](./render.js)
