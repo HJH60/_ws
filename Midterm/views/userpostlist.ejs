@@ -1,0 +1,20 @@
+<%- include('header.ejs') %>
+  <div id="center"> 
+    <h1><%= user %>'s Posts</h1>
+    <p>There are <strong><%= posts.length %></strong> posts!</p>
+    <!-- <ul id="posts">
+      ${list.join('\n')}
+    </ul> -->
+
+    <ul id="posts">
+      <% for (let post of posts) { %>
+        <div>
+          <li>
+            <h2><%= post.title %></h2>
+            <p><a href="/post/<%=post.id%>">Read post</a></p>
+          </li>
+        </div>
+        <% } %>
+    </ul>
+  </div>
+  <%- include('footer.ejs') %>

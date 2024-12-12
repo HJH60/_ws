@@ -1,0 +1,11 @@
+<%- include('header.ejs') %>
+  <div id="creat">
+    <h1>New Post</h1>
+    <h2>Create a new post.</h2>
+    <form action="/post" method="post">
+      <p><input type="text" placeholder="Title" name="title"></p>
+      <p><textarea placeholder="Contents" name="body"></textarea></p>
+      <h3><input id="creat_button" type="submit" value="Create"></h3>
+    </form>
+  </div>
+<%- include('footer.ejs') %>

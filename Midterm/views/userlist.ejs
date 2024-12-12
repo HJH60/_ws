@@ -1,0 +1,17 @@
+<%- include('header.ejs') %>
+  <div id="center"> 
+    <h1>Users</h1>
+    <ul id="posts">
+      <% for (let user of users) { %>
+        <!-- <div id="text"> -->
+          <li>
+            <h2>
+                <a href="/list/<%=user.username%>"><%= user.username%></a>
+            </h2>
+            
+          </li>
+        <!-- </div> -->
+        <% } %>
+    </ul>
+  </div>
+  <%- include('footer.ejs') %>

@@ -1,0 +1,24 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="/public/main.css">
+  <div class="topnav">
+    <!-- <a href="https://github.com/HJH60">Github</a> -->
+    <!-- <a href="/login">LOGIN</a> -->
+    <!-- <p>${(user==null)?'<a href="/login">Login</a> to Create a Post!':'Welcome '+user.username+', You may <a href="/post/new">Create a Post</a> or <a href="/logout">Logout</a> !'}</p> -->
+    <p>
+      <% if (!user) { %>
+        <a href="/login">LOGIN</a>
+        <% } else { %>
+          <a href="/logout">LOGOUT</a>
+          <a href="/post/new">CREAT POST</a>
+          <% } %>
+    </p>
+    <a href="/userlist">USER LIST</a>
+    <a href="/"><img id="home" src="D:\I.E. study\ws\_ws\Midterm\img\home.png"></a>
+  </div>
+</head>
+
+<body>
+
+  <section id="content">

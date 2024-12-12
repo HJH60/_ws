@@ -1,0 +1,25 @@
+<%- include('header.ejs') %>
+  <div id="center">
+    <% if (user) { %>
+      <p>Welcome <%= user.username %></p>
+    <% } else { %>
+      <p>Welcome, Guest!</p>
+    <% } %>    
+    <h1>Posts</h1>
+    <!-- <h2>You have <strong>
+        <%=posts.length%>
+      </strong> posts!</h2>
+    <h2><a href="/post/new">Create a Post</a></h2> -->
+    <ul id="posts">
+      <% for (let post of posts) { %>
+        <!-- <div id="text"> -->
+          <li>
+            <h2><a href="/list/<%=post.username%>"><%= post.username %></a></h2>
+              <h3><%= post.title %></h3>
+            <p><a href="/post/<%=post.id%>">Read post</a></p>
+          </li>
+        <!-- </div> -->
+        <% } %>
+    </ul>
+  </div>
+  <%- include('footer.ejs') %>

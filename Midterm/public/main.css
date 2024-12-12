@@ -1,0 +1,115 @@
+body {
+  /* padding: 80px; */
+  margin: 0;
+  font: 16px Helvetica, Arial;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+#posts {
+  margin: 0;
+  padding: 0;
+}
+
+#posts li {
+  margin: 30px 0;
+  padding: 20;
+  padding-right: 30px;
+  padding-left: 30px;
+  /* border-bottom: 1px solid #eee; */
+  border: 3px solid rgb(214, 220, 223);
+  border-radius: 10px;
+  background-color: rgb(214, 220, 223);
+  list-style: none;
+}
+
+#posts li:last-child {
+  border-bottom: none;
+}
+
+textarea {
+  width: 1130px;
+  height: 300px;
+}
+
+input[type=text],
+textarea {
+  border: 1px solid #eee;
+  border-top-color: #ddd;
+  border-left-color: #ddd;
+  border-radius: 2px;
+  padding: 15px;
+  font-size: .8em;
+}
+
+input[type=text] {
+  width: 1130px;
+}
+
+
+.topnav {
+  overflow: hidden;
+  background-color: #000000;
+  /*#ad7de7*/
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+  text-align: right;
+}
+
+#text {
+  border: 2px solid black;
+  background-color: rgb(194, 206, 211);
+}
+
+#home {
+  width: 20px;
+  height: 20px;
+}
+
+#center {
+  /* text-align:center; */
+  border-radius: 12px;
+  padding-right: 200px;
+  padding-left: 200px;
+}
+#login {
+  margin: 50px 300px;
+  padding: 20px 50px 50px;
+  border: 30px solid rgb(214, 220, 223);
+  background-color: rgb(214, 220, 223);
+  text-align: center;
+}
+#login input{
+  height: 50;
+  width: 800;
+  text-align: center;
+}
+#creat {
+  margin: 50px 100px;
+  padding: 20px 50px 50px;
+  border: 30px solid rgb(214, 220, 223);
+  background-color: rgb(214, 220, 223);
+  /* text-align: center; */
+}
+#creat_button{
+  height: 30;
+  width: 1125;
+}
