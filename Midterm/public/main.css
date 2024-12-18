@@ -107,9 +107,20 @@ input[type=text] {
   padding: 20px 50px 50px;
   border: 30px solid rgb(214, 220, 223);
   background-color: rgb(214, 220, 223);
-  /* text-align: center; */
+  /* text-align: center; */ 
 }
 #creat_button{
   height: 30;
   width: 1125;
+}
+#commit{
+  height: 20px;
+  width: 20px;
+}
+#committext{
+  height: 20px;
+  width: 950;
+}
+#commitbutton{
+  height: 30px;
 }

@@ -1,6 +1,22 @@
 <%- include('header.ejs') %>
 <div id="center">
-    <h1><%=post.title%></h1>
-    <p><%=post.body%></p>
+    <ul id="posts">
+        <li>
+            <h1><%=post.title%></h1>
+            <p><%=post.body%></p>
+            <form action="/post/commit/<%= post.id %>" method="post">
+                <img id="commit" src="https://github.com/HJH60/_ws/blob/master/Midterm/img/commit.png?raw=true">
+                <input id="committext" type="text" placeholder="commit" name="commit">
+                <input id="commitbutton" type="submit" value="Post">
+            </form>
+            <% if (commits.length > 0) { %>
+                <% commits.forEach(commits => { %>
+                    <li>
+                    <strong><%= commits.username %>：</strong> <%= commits.committext %>
+                    </li>
+                <% }); %>
+            <% } %>                 
+        </li></ul>
 </div>
 <%- include('footer.ejs') %>
+ 

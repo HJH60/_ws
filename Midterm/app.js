@@ -4,9 +4,9 @@ import { viewEngine, ejsEngine, oakAdapter } from "https://deno.land/x/view_engi
 import { Session } from "https://deno.land/x/oak_sessions/mod.ts";
 
 const db = new DB("blog.db");
-// db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, title TEXT, body TEXT)");
 db.query("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS commits (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, post_id INTEGER, committext TEXT)");
 
 const router = new Router();
 
@@ -22,6 +22,7 @@ router.get('/', list)
   .get('/logout', logout)
   .get('/userlist',userlist)
   .get('/list/:user', listUserPosts)
+  .post('/post/commit/:id',commit)
 
 const app = new Application();
 app.use(Session.initMiddleware())
@@ -57,14 +58,16 @@ function userQuery(sql) {
   console.log('userQuery: list=', list)
   return list
 }
-// function query(sql) {
-//   let list = []
-//   for (const [id, title, body] of db.query(sql)) {
-//     list.push({id, title, body})
-//   }
-//   return list
-// }
-//===
+
+function commitQuery(sql) {
+  let list = []
+  for (const [id, username, post_id, committext] of sqlcmd(sql)) {
+    list.push({id, username, post_id, committext})
+  }
+  console.log('commitQuery: list=', list)
+  return list
+}
+
 async function parseFormBody(body) {
   const pairs = await body.form()
   const obj = {}
@@ -75,7 +78,6 @@ async function parseFormBody(body) {
 }
 
 async function signupUi(ctx) {
-  // ctx.response.body = await render.signupUi();
   const user = await ctx.state.session.get('user') || null;
   ctx.render("views/signup.ejs", { user });
 }
@@ -89,16 +91,13 @@ async function signup(ctx) {
     console.log('dbUsers=', dbUsers)
     if (dbUsers.length === 0) {
       sqlcmd("INSERT INTO users (username, password) VALUES (?, ?)", [user.username, user.password]);
-      // ctx.response.body = render.success()
-      ctx.response.body = await ctx.render("views/success.ejs", { user });
+      await ctx.render("views/success.ejs", { user });
     } else 
-      // ctx.response.body = render.fail()
-      ctx.response.body = await ctx.render("views/fail.ejs", { user });
+      await ctx.render("views/fail.ejs", { user });
     }
 }
 
 async function loginUi(ctx) {
-  // ctx.response.body = await render.loginUi();
   const user = await ctx.state.session.get('user') || null;
   ctx.render("views/login.ejs", { user });
 
@@ -115,7 +114,6 @@ async function login(ctx) {
       console.log('session.user=', await ctx.state.session.get('user'))
       ctx.response.redirect('/');
     } else {
-      // ctx.response.body = render.fail()
       ctx.response.body = await ctx.render("views/fail.ejs", { user });
     }
   }
@@ -128,7 +126,6 @@ async function logout(ctx) {
 
 async function userlist(ctx) {
   let users = userQuery("SELECT id, username, password  FROM users")
-  // ctx.render("views/list.ejs", {posts});
   console.log('list:posts=', users) 
   const user = await ctx.state.session.get('user');
   console.log('list:user=', user)
@@ -143,17 +140,36 @@ async function listUserPosts(ctx) {
   console.log('list:users=', users)
   let posts = postQuery(`SELECT id, username, title, body FROM posts WHERE username='${user}'`)
   console.log('list:posts=', posts)
-  // console.log('users.username:',users.username,',posts.username:',posts.username)
   if (!posts[user]) {
     posts[user] = []; 
   }
-  // ctx.response.body = await render.listUserPosts(user, posts);
   await ctx.render('views/userpostlist.ejs', { posts, user });
 }
-//---
+
+async function commit(ctx) {
+  const body = ctx.request.body
+  const pid = ctx.params.id;
+  if (body.type() === "form") {
+    const pairs = await body.form()
+    const commit = {}
+    for (const [key, value] of pairs) {
+      commit[key] = value
+    }
+    console.log('create:commit=', commit)
+    console.log('test:commit=', commit.commit)
+    var user = await ctx.state.session.get('user')
+    if (user != null) {
+      console.log('user=', user)
+      sqlcmd("INSERT INTO commits (username, post_id, committext) VALUES (?, ?, ?)", [user.username, pid, commit.commit]);  
+    } else {
+      ctx.throw(404, 'not login yet!');
+    }
+    ctx.response.redirect(`/post/${pid}`);
+  }
+}
+
 async function list(ctx) {
   let posts = postQuery("SELECT id, username, title, body FROM posts")
-  // ctx.render("views/list.ejs", {posts});
   console.log('list:posts=', posts) 
   const user = await ctx.state.session.get('user');
   console.log('list:user=', user)
@@ -174,10 +190,11 @@ async function show(ctx) {
   const user = await ctx.state.session.get('user') || null;
   const pid = ctx.params.id;
   let posts = postQuery(`SELECT id, username, title, body FROM posts WHERE id=${pid}`)
+  let commits = commitQuery(`SELECT id, username, post_id, committext FROM commits WHERE post_id=${pid}`)
   let post = posts[0]
   console.log('show:post=', post)
   if (!post) ctx.throw(404, 'invalid post id');
-  ctx.render('views/show.ejs', {post,user})
+  ctx.render('views/show.ejs', {post, commits, user})
 }
 
 async function create(ctx) {
@@ -189,7 +206,6 @@ async function create(ctx) {
       post[key] = value
     }
     console.log('create:post=', post)
-    // db.query("INSERT INTO posts (title, body) VALUES (?, ?)", [post.title, post.body]);
     var user = await ctx.state.session.get('user')
     if (user != null) {
       console.log('user=', user)
@@ -202,7 +218,6 @@ async function create(ctx) {
 }
 
 async function pub(ctx) { 
-  // console.log(ctx.params);
   var path = ctx.params[0]
   await send(ctx, path, {
     root: Deno.cwd()+'/public',
